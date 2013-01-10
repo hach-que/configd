@@ -1,0 +1,4 @@
+[Project]
+Name=configd
+Manager=KDevCMakeManager
+VersionControl=kdevgit
