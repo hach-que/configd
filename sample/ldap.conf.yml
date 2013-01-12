@@ -1,0 +1,12 @@
+host: 127.0.0.1
+base: dc=example,dc=com
+bind_policy: soft
+pam_lookup_policy: yes
+pam_password: exop
+nss_initgroups_ignoreusers:
+    - root
+    - ldap
+nss_schema: rfc2307bis
+nss_map_attribute:
+    uniqueMember: member
+ssl: start_tls

@@ -1,4 +1,22 @@
+cmake_minimum_required(VERSION 2.8)
 project(configd)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules)
 
-add_executable(configd main.c)
+if(CMAKE_COMPILER_IS_GNUCC)
+  message("Use clang." FATAL_ERROR)
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX)
+  message("Use clang." FATAL_ERROR)
+endif()
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+ 
+#find_package(xslt)
+#find_package(yaml)
+find_package(FUSE)
 
+add_library(bstring STATIC lib/bsafe.c lib/bstraux.c lib/bstrlib.c)
+add_library(simclist STATIC lib/simclist.c)
+add_definitions(${FUSE_DEFINITIONS} -DFUSE_USE_VERSION=26 -D_BSD_SOURCE)
+include_directories(lib ${FUSE_INCLUDE_DIR})
+add_executable(configd hive_yaml.c main.c hive_app.c hive_fuse.c hive_inotify.c hive_object.c hive_xslt.c)
+target_link_libraries(configd yaml bstring simclist ${FUSE_LIBRARIES} xslt xml2)
